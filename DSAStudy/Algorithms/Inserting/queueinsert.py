@@ -1,3 +1,4 @@
+import os
 import sys
 import time
 from collections import deque
@@ -6,27 +7,62 @@ class Queue:
     def __init__(self):
         self.queue = deque()
 
-    def enqueue(self, data):
-        start_time = time.time()  # Start the timer
-        self.queue.append(data)
-        end_time = time.time()  # End the timer
+    def enqueue(self, file_path, file_size):
+        self.queue.append((file_path, file_size))
 
-        # Measure space complexity
-        space_used = sys.getsizeof(self.queue)
-        print(f"Space complexity: {space_used} bytes (for the queue)")
+# Function to insert a file into a queue (simulating file insertion)
+def insert_file_into_queue(queue, file_path):
+    try:
+        file_size = os.path.getsize(file_path)
+    except OSError:
+        print(f"Error retrieving file size for {file_path}")
+        return
+    
+    # Start timing the insertion
+    start_time = time.time()
 
-        # Measure time complexity
-        time_taken = end_time - start_time
-        print(f"Time taken to enqueue into queue: {time_taken:.6f} seconds")
-        print(f"Time complexity: O(1)")
+    queue.enqueue(file_path, file_size)
 
-    def display(self):
-        for item in self.queue:
-            print(f"Queue path: {item}")
+    end_time = time.time()
+    print(f"Time taken for queue file insertion: {end_time - start_time:.6f} seconds")
+    print(f"Time complexity: O(1)")
 
-# Example usage for the queue
-queue = Queue()
-queue.enqueue("/Volumes/CD/pCLE/Dye_Concentration_Experiments/BovineTissue/Colon/COL001.txt")
-queue.enqueue("/Volumes/CD/pCLE/Dye_Concentration_Experiments/BovineTissue/Colon/COL002.txt")
-queue.enqueue("/Volumes/CD/pCLE/Dye_Concentration_Experiments/BovineTissue/Colon/COL003.txt")
-queue.display()
+# Function to traverse the directory and collect files using queue
+def traverse_directory_for_queue(root_directory):
+    queue = Queue()
+
+    # Start timing the traversal
+    start_time = time.time()
+
+    for dirpath, dirnames, filenames in os.walk(root_directory):
+        for filename in filenames:
+            file_path = os.path.join(dirpath, filename)
+            try:
+                file_size = os.path.getsize(file_path)
+                queue.enqueue(file_path, file_size)
+            except OSError:
+                continue
+
+    end_time = time.time()
+    print(f"Time taken for directory traversal: {end_time - start_time:.6f} seconds")
+
+    # Measure space complexity for queue
+    space_used_queue = sys.getsizeof(queue)
+    print(f"Space complexity for queue: {space_used_queue} bytes")
+
+    return queue
+
+# Main function to perform file insertion into queue
+def run_file_insertion_with_queue(root_directory, file_to_insert):
+    # Traverse the directory and collect files
+    queue = traverse_directory_for_queue(root_directory)
+
+    # Insert the new file into the queue
+    print(f"\nInserting {file_to_insert} into the queue:")
+    insert_file_into_queue(queue, file_to_insert)
+
+# Example usage for queue file insertion
+if __name__ == "__main__":
+    root_directory = "/Volumes/CD/pCLE"  # Replace with your actual root directory
+    file_to_insert = "/path/to/new/file.txt"  # Replace with the path of the new file
+    run_file_insertion_with_queue(root_directory, file_to_insert)
