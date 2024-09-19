@@ -18,8 +18,8 @@ class HashTable:
     # Traverse the hash table (process all paths)
     def traverse_and_apply_operations(self):
         for key, value in self.table.items():
-            # Simulate an operation (here we just print, but you can apply real algorithms)
-            print(f"Processing path: {key}")
+            # Simulate an operation (here we just traverse and apply)
+            pass
 
 # Collect all paths in the directory into a hash table
 def collect_paths_into_hashtable(root_directory):
@@ -38,18 +38,18 @@ def collect_paths_into_hashtable(root_directory):
 
 # Function to perform operations and measure time and space complexity
 def perform_operations_on_hashtable(hashtable):
-    # Measure space complexity
-    space_used = sys.getsizeof(hashtable)
-    print(f"Space complexity: {space_used} bytes (for the hash table)")
-
+    # Measure space complexity (size of the hash table in bytes)
+    space_used = sys.getsizeof(hashtable.table) + sum([sys.getsizeof(k) + sys.getsizeof(v) for k, v in hashtable.table.items()])
+    
     # Time complexity: Measure time to traverse the entire hash table
     start_time = time.time()
     hashtable.traverse_and_apply_operations()  # Traverse and apply operations
     end_time = time.time()
 
     time_taken = end_time - start_time
-    print(f"Time taken to traverse the hash table: {time_taken:.6f} seconds")
-    print(f"Time complexity: O(n), where n is the number of elements (paths)")
+    
+    # Output the results in the format you need for Excel
+    print(f"Directory Traversal, O(1) on average, O(n), {time_taken:.6f} seconds, {space_used} bytes")
 
 # Main function
 def main():

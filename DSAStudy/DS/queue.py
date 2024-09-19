@@ -26,8 +26,8 @@ class Queue:
     def traverse_and_apply_operations(self):
         while not self.is_empty():
             path = self.dequeue()  # Dequeue the front path
-            # Simulate an operation (here we just print, but you can apply real algorithms)
-            print(f"Processing path: {path}")
+            # Simulate an operation (you can apply real algorithms here)
+            # print(f"Processing path: {path}")  # Uncomment to print the path if needed
 
 # Collect all paths in the directory into a queue
 def collect_paths_into_queue(root_directory):
@@ -46,18 +46,18 @@ def collect_paths_into_queue(root_directory):
 
 # Function to perform operations and measure time and space complexity
 def perform_operations_on_queue(queue):
-    # Measure space complexity
-    space_used = sys.getsizeof(queue)
-    print(f"Space complexity: {space_used} bytes (for the queue)")
-
+    # Measure space complexity (size of the queue + size of each path in the queue)
+    space_used = sys.getsizeof(queue.queue) + sum([sys.getsizeof(path) for path in queue.queue])
+    
     # Time complexity: Measure time to traverse the entire queue
     start_time = time.time()
     queue.traverse_and_apply_operations()  # Traverse and apply operations
     end_time = time.time()
 
     time_taken = end_time - start_time
-    print(f"Time taken to traverse the queue: {time_taken:.6f} seconds")
-    print(f"Time complexity: O(n), where n is the number of elements (paths)")
+    
+    # Output the results for Excel
+    print(f"Directory Traversal, O(n), O(n), {time_taken:.6f} seconds, {space_used} bytes")
 
 # Main function
 def main():

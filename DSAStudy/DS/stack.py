@@ -25,8 +25,8 @@ class Stack:
     def traverse_and_apply_operations(self):
         while not self.is_empty():
             path = self.pop()  # Pop the top path from the stack
-            # Simulate an operation (here we just print, but you can apply real algorithms)
-            print(f"Processing path: {path}")
+            # Simulate an operation (you can apply real algorithms here)
+            # print(f"Processing path: {path}")  # Uncomment to print paths if needed
 
 # Collect all paths in the directory into a stack
 def collect_paths_into_stack(root_directory):
@@ -45,18 +45,18 @@ def collect_paths_into_stack(root_directory):
 
 # Function to perform operations and measure time and space complexity
 def perform_operations_on_stack(stack):
-    # Measure space complexity
-    space_used = sys.getsizeof(stack)
-    print(f"Space complexity: {space_used} bytes (for the stack)")
-
+    # Measure space complexity (size of the stack + size of each path in the stack)
+    space_used = sys.getsizeof(stack.stack) + sum([sys.getsizeof(path) for path in stack.stack])
+    
     # Time complexity: Measure time to traverse the entire stack
     start_time = time.time()
     stack.traverse_and_apply_operations()  # Traverse and apply operations
     end_time = time.time()
 
     time_taken = end_time - start_time
-    print(f"Time taken to traverse the stack: {time_taken:.6f} seconds")
-    print(f"Time complexity: O(n), where n is the number of elements (paths)")
+    
+    # Output the results for Excel
+    print(f"Directory Traversal, O(n), O(n), {time_taken:.6f} seconds, {space_used} bytes")
 
 # Main function
 def main():

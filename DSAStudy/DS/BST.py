@@ -1,6 +1,7 @@
 import os
 import time
 import sys
+from collections import deque
 
 # Binary Search Tree (BST) implementation for storing paths
 class BST:
@@ -37,8 +38,38 @@ class BST:
     def in_order_traversal(self, node):
         if node is not None:
             self.in_order_traversal(node.left)
-            print(f"Processing path: {node.data}")  # Simulate processing
             self.in_order_traversal(node.right)
+
+    # Pre-order traversal of the BST (root -> left -> right)
+    def pre_order_traversal(self, node):
+        if node is not None:
+            self.pre_order_traversal(node.left)
+            self.pre_order_traversal(node.right)
+
+    # Post-order traversal of the BST (left -> right -> root)
+    def post_order_traversal(self, node):
+        if node is not None:
+            self.post_order_traversal(node.left)
+            self.post_order_traversal(node.right)
+
+    # Breadth-First Search (BFS)
+    def bfs(self):
+        if self.root is None:
+            return
+
+        queue = deque([self.root])
+        while queue:
+            node = queue.popleft()
+            if node.left is not None:
+                queue.append(node.left)
+            if node.right is not None:
+                queue.append(node.right)
+
+    # Depth-First Search (DFS) using pre-order traversal
+    def dfs(self, node):
+        if node is not None:
+            self.dfs(node.left)
+            self.dfs(node.right)
 
 # Collect all paths in the directory into a BST
 def collect_paths_into_bst(root_directory):
@@ -59,16 +90,49 @@ def collect_paths_into_bst(root_directory):
 def perform_operations_on_bst(bst):
     # Measure space complexity
     space_used = sys.getsizeof(bst)
-    print(f"Space complexity: {space_used} bytes (for the binary search tree)")
+    
+    # Store results for formatted output
+    results = []
 
-    # Time complexity: Measure time to traverse the entire BST (in-order traversal)
+    # In-order traversal
     start_time = time.time()
-    bst.in_order_traversal(bst.root)  # Traverse and apply operations
+    bst.in_order_traversal(bst.root)
     end_time = time.time()
+    time_taken_in_order = end_time - start_time
+    results.append(["In-order Traversal", "O(n)", "O(n)", f"{time_taken_in_order:.6f} seconds", f"{space_used} bytes"])
 
-    time_taken = end_time - start_time
-    print(f"Time taken to traverse the BST: {time_taken:.6f} seconds")
-    print(f"Time complexity: O(n), where n is the number of elements (paths)")
+    # Pre-order traversal
+    start_time = time.time()
+    bst.pre_order_traversal(bst.root)
+    end_time = time.time()
+    time_taken_pre_order = end_time - start_time
+    results.append(["Pre-order Traversal", "O(n)", "O(n)", f"{time_taken_pre_order:.6f} seconds", f"{space_used} bytes"])
+
+    # Post-order traversal
+    start_time = time.time()
+    bst.post_order_traversal(bst.root)
+    end_time = time.time()
+    time_taken_post_order = end_time - start_time
+    results.append(["Post-order Traversal", "O(n)", "O(n)", f"{time_taken_post_order:.6f} seconds", f"{space_used} bytes"])
+
+    # Breadth-First Search (BFS)
+    start_time = time.time()
+    bst.bfs()
+    end_time = time.time()
+    time_taken_bfs = end_time - start_time
+    results.append(["BFS Traversal", "O(n)", "O(n)", f"{time_taken_bfs:.6f} seconds", f"{space_used} bytes"])
+
+    # Depth-First Search (DFS)
+    start_time = time.time()
+    bst.dfs(bst.root)
+    end_time = time.time()
+    time_taken_dfs = end_time - start_time
+    results.append(["DFS Traversal", "O(n)", "O(n)", f"{time_taken_dfs:.6f} seconds", f"{space_used} bytes"])
+
+    # Print the results in the desired format
+    print(f"{'Operation':<25} {'Time Complexity':<15} {'Space Complexity':<15} {'Time (in seconds)':<20} {'Size (in bytes)':<15}")
+    for result in results:
+        print(f"{result[0]:<25} {result[1]:<15} {result[2]:<15} {result[3]:<20} {result[4]:<15}")
 
 # Main function
 def main():

@@ -20,7 +20,6 @@ class Graph:
         while queue:
             node = queue.popleft()
             if node not in visited:
-                print(f"Processing path: {node}")
                 visited.add(node)
                 for neighbor in self.graph[node]:
                     if neighbor not in visited:
@@ -32,7 +31,6 @@ class Graph:
             visited = set()
 
         if node not in visited:
-            print(f"Processing path: {node}")
             visited.add(node)
             for neighbor in self.graph[node]:
                 if neighbor not in visited:
@@ -58,22 +56,29 @@ def collect_paths_into_graph(root_directory):
 # Function to perform operations and measure time and space complexity
 def perform_operations_on_graph(graph, start_node):
     # Measure space complexity
-    space_used = sys.getsizeof(graph)
-    print(f"Space complexity: {space_used} bytes (for the graph)")
+    space_used = sys.getsizeof(graph.graph) + sum(sys.getsizeof(v) for v in graph.graph.values())
+    
+    # Store results for formatted output
+    results = []
 
     # Time complexity: Measure time to perform BFS traversal
-    print("\nStarting BFS Traversal:")
     start_time = time.time()
     graph.bfs(start_node)
     end_time = time.time()
-    print(f"Time taken for BFS: {end_time - start_time:.6f} seconds")
+    time_taken_bfs = end_time - start_time
+    results.append(["BFS Traversal", "O(V + E)", "O(V + E)", f"{time_taken_bfs:.6f} seconds", f"{space_used} bytes"])
 
     # Time complexity: Measure time to perform DFS traversal
-    print("\nStarting DFS Traversal:")
     start_time = time.time()
     graph.dfs(start_node)
     end_time = time.time()
-    print(f"Time taken for DFS: {end_time - start_time:.6f} seconds")
+    time_taken_dfs = end_time - start_time
+    results.append(["DFS Traversal", "O(V + E)", "O(V + E)", f"{time_taken_dfs:.6f} seconds", f"{space_used} bytes"])
+
+    # Print the results in the required format
+    print(f"{'Operation':<25} {'Time Complexity':<15} {'Space Complexity':<15} {'Time (in seconds)':<20} {'Size (in bytes)':<15}")
+    for result in results:
+        print(f"{result[0]:<25} {result[1]:<15} {result[2]:<15} {result[3]:<20} {result[4]:<15}")
 
 # Main function
 def main():
